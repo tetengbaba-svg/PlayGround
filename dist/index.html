@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#060914" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Spider-Man: Neon Pursuit — a stylish 3D web-swinging chase game. Swing across a neon city, web up enemies, and take down the Green Goblin." />
+    <title>Spider-Man: Neon Pursuit</title>
+    <script type="module" crossorigin src="/assets/index-BY96uJTD.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-F3TzhLsT.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene" aria-label="3D game view"></div>
+      <div class="screen-fx" aria-hidden="true">
+        <div class="vignette"></div>
+        <div class="speed-lines" id="speedLines"></div>
+        <div class="damage-flash" id="damageFlash"></div>
+        <div class="slowmo-grade" id="slowmoGrade"></div>
+      </div>
+
+      <div class="cinema-bars" id="cinemaBars" aria-hidden="true">
+        <i></i><i></i>
+      </div>
+
+      <main id="hud" class="hud is-hidden" aria-live="polite">
+        <header class="hud-top">
+          <section class="mission-card">
+            <div class="chapter-label" id="chapterLabel">CH. 01 / NEON HEIGHTS</div>
+            <div class="objective-row">
+              <span class="objective-pip"></span>
+              <span id="objectiveText">SWING TO THE SIGNAL</span>
+            </div>
+          </section>
+
+          <section class="chase-clock" id="chaseClock">
+            <span class="micro-label">GOBLIN GETAWAY</span>
+            <strong id="timerText">2:30</strong>
+          </section>
+
+          <section class="score-card">
+            <span class="micro-label">SCORE</span>
+            <strong id="scoreText">000000</strong>
+          </section>
+        </header>
+
+        <aside class="status-rail">
+          <div class="health-wrap">
+            <div class="status-title"><span>VITALS</span><span id="healthText">100</span></div>
+            <div class="meter health-meter"><i id="healthFill"></i><b></b></div>
+          </div>
+          <div class="web-wrap">
+            <div class="status-title"><span>WEB FLUID</span><span id="webText">100</span></div>
+            <div class="meter web-meter"><i id="webFill"></i><b></b></div>
+          </div>
+          <div class="lives-row">
+            <span class="micro-label">LIVES</span>
+            <div id="livesPips" class="lives-pips"><i></i><i></i><i></i></div>
+          </div>
+        </aside>
+
+        <section class="goblin-panel is-hidden" id="goblinPanel">
+          <div class="goblin-heading">
+            <span class="goblin-tag"><i></i> GREEN GOBLIN</span>
+            <span id="distanceText">000m</span>
+          </div>
+          <div class="goblin-meter"><i id="goblinFill"></i><b></b></div>
+          <div class="goblin-note" id="goblinNote">WEB HIM, THEN STRIKE</div>
+        </section>
+
+        <div class="combo-stack" id="comboStack">
+          <span id="comboNumber">x2</span>
+          <small>COMBO</small>
+          <em id="comboWord">NICE!</em>
+        </div>
+
+        <div class="reticle" id="reticle" aria-hidden="true">
+          <i class="r-dot"></i><i class="r-ring"></i><i class="r-tick t1"></i><i class="r-tick t2"></i><i class="r-tick t3"></i><i class="r-tick t4"></i>
+        </div>
+
+        <div class="world-marker web-target is-hidden" id="webTargetMarker" aria-hidden="true">
+          <i></i><span>WEB</span>
+        </div>
+        <div class="world-marker objective-marker" id="objectiveMarker" aria-hidden="true">
+          <i></i><span id="objectiveDistance">72m</span>
+        </div>
+        <div class="world-marker civilian-marker is-hidden" id="civilianMarker" aria-hidden="true">
+          <i></i><span>RESCUE · R</span>
+        </div>
+
+        <div class="prompt" id="prompt">
+          <kbd>SPACE</kbd><span>HOLD TO SWING</span>
+        </div>
+
+        <div class="toast-stack" id="toastStack"></div>
+
+        <div class="boss-banner is-hidden" id="bossBanner">
+          <span>FINAL AERIAL BATTLE</span>
+          <strong>NO MORE RUNNING, GOBLIN</strong>
+        </div>
+
+        <div class="touch-controls" id="touchControls" aria-hidden="true">
+          <div class="joystick-zone">
+            <div class="joystick-base" id="joystickBase"><i id="joystickKnob"></i></div>
+          </div>
+          <div class="touch-actions">
+            <button class="touch-btn swing" data-action="swing"><span>WEB</span><small>SWING</small></button>
+            <button class="touch-btn web" data-action="web"><span>WEB</span><small>SHOT</small></button>
+            <button class="touch-btn strike" data-action="strike"><span>STRIKE</span><small>F</small></button>
+            <button class="touch-btn dodge" data-action="dodge"><span>DODGE</span><small>SHIFT</small></button>
+            <button class="touch-btn rescue" data-action="rescue"><span>RESCUE</span><small>R</small></button>
+          </div>
+        </div>
+      </main>
+
+      <section id="titleScreen" class="title-screen">
+        <header class="title-top">
+          <span class="fan-tag">A MARVEL FAN CONCEPT</span>
+          <span class="platform-tag">PC · MOBILE</span>
+        </header>
+
+        <div class="title-lockup">
+          <div class="title-kicker"><span></span> THE CITY HAS A NEW HUNTER</div>
+          <h1>
+            <span class="spider-word">SPIDER-MAN</span>
+            <span class="neon-word">NEON<span>PURSUIT</span></span>
+          </h1>
+          <p class="one-liner">SWING. STRIKE. SAVE THE CITY.</p>
+          <p class="title-copy">The Green Goblin owns the skyline. Chase him across a neon-lit Manhattan, web up his crew, and bring the Goblin down before the sun comes up.</p>
+          <div class="title-actions">
+            <button id="startButton" class="primary-btn"><span>START PURSUIT</span><i>▶</i></button>
+            <button id="howToButton" class="ghost-btn">HOW TO PLAY</button>
+          </div>
+        </div>
+
+        <div class="title-footer">
+          <div class="title-meta"><span>03</span> CHAPTERS <b></b> <span>∞</span> WEB COMBOS <b></b> <span>01</span> GOBLIN</div>
+          <button id="soundButton" class="icon-btn" aria-label="Toggle sound">SOUND ON</button>
+        </div>
+      </section>
+
+      <section id="modal" class="modal-layer is-hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-card">
+          <button id="modalClose" class="close-btn" aria-label="Close">×</button>
+          <span class="eyebrow">FIELD MANUAL</span>
+          <h2 id="modalTitle">HOW TO SWING</h2>
+          <div id="modalContent" class="modal-content"></div>
+        </div>
+      </section>
+
+      <section id="cutsceneOverlay" class="cutscene-overlay is-hidden" aria-live="assertive">
+        <div class="cutscene-top">
+          <span id="cutsceneChapter">CHAPTER 01</span>
+          <button id="skipCutscene" class="skip-btn">SKIP ›</button>
+        </div>
+        <div class="cutscene-caption">
+          <span class="caption-rule"></span>
+          <p id="cutsceneText"></p>
+        </div>
+      </section>
+
+      <section id="resultsScreen" class="panel-screen is-hidden">
+        <div class="panel-bg"></div>
+        <div class="result-card">
+          <span class="eyebrow" id="resultsEyebrow">CHAPTER CLEAR</span>
+          <h2 id="resultsTitle">NEON HEIGHTS<br /><em>SECURED.</em></h2>
+          <p id="resultsCopy">The Goblin slipped away, but the city can breathe again.</p>
+          <div class="result-grid">
+            <div><span>SCORE</span><strong id="resultScore">000000</strong></div>
+            <div><span>CIVILIANS</span><strong id="resultCivilians">0/3</strong></div>
+            <div><span>BEST COMBO</span><strong id="resultCombo">x1</strong></div>
+            <div><span>TIME</span><strong id="resultTime">0:00</strong></div>
+          </div>
+          <button id="resultsContinue" class="primary-btn"><span>CONTINUE</span><i>›</i></button>
+        </div>
+      </section>
+
+      <section id="upgradeScreen" class="panel-screen is-hidden">
+        <div class="panel-bg"></div>
+        <div class="upgrade-wrap">
+          <span class="eyebrow">WEB-TECH REWARD</span>
+          <h2>CHOOSE AN UPGRADE</h2>
+          <p>Every chapter makes the Goblin meaner. Pick one permanent upgrade.</p>
+          <div class="upgrade-cards" id="upgradeCards"></div>
+        </div>
+      </section>
+
+      <section id="failScreen" class="panel-screen is-hidden">
+        <div class="panel-bg"></div>
+        <div class="result-card fail-card">
+          <span class="eyebrow">PURSUIT FAILED</span>
+          <h2 id="failTitle">THE GOBLIN<br /><em>GOT AWAY.</em></h2>
+          <p id="failCopy">The city still needs you. Get back in the air.</p>
+          <div class="fail-lives"><span>LIVES LEFT</span><div id="failLives" class="lives-pips"><i></i><i></i><i></i></div></div>
+          <button id="retryButton" class="primary-btn"><span>RETRY CHAPTER</span><i>↻</i></button>
+          <button id="quitButton" class="ghost-btn">BACK TO TITLE</button>
+        </div>
+      </section>
+
+      <section id="victoryScreen" class="panel-screen is-hidden">
+        <div class="panel-bg victory-bg"></div>
+        <div class="result-card victory-card">
+          <span class="eyebrow">CITY SAVED · DAWN</span>
+          <h2>THE SKY<br /><em>IS YOURS.</em></h2>
+          <p>Green Goblin is down. The sun is coming up over a city that gets to see another morning.</p>
+          <div class="result-grid">
+            <div><span>FINAL SCORE</span><strong id="victoryScore">000000</strong></div>
+            <div><span>CIVILIANS</span><strong id="victoryCivilians">0</strong></div>
+            <div><span>RANK</span><strong id="victoryRank">S</strong></div>
+          </div>
+          <button id="playAgainButton" class="primary-btn"><span>PLAY AGAIN</span><i>↻</i></button>
+        </div>
+      </section>
+
+      <section id="pauseScreen" class="modal-layer pause-layer is-hidden" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+        <div class="modal-card pause-card">
+          <span class="eyebrow">TAKE A BREATH, HERO</span>
+          <h2 id="pauseTitle">PAUSED</h2>
+          <div class="pause-actions">
+            <button id="resumeButton" class="primary-btn"><span>RESUME</span><i>▶</i></button>
+            <button id="restartButton" class="ghost-btn">RESTART CHAPTER</button>
+            <button id="pauseHowTo" class="ghost-btn">CONTROLS</button>
+            <button id="pauseQuit" class="ghost-btn">QUIT TO TITLE</button>
+          </div>
+          <p class="pause-tip">TIP: Release your web at the top of a swing to launch higher.</p>
+        </div>
+      </section>
+
+      <div id="loading" class="loading">
+        <div class="loading-mark"><i></i><i></i></div>
+        <span>SPINNING UP THE CITY</span>
+        <div class="loading-bar"><i></i></div>
+      </div>
+    </div>
+
+  </body>
+</html>

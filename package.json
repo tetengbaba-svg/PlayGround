@@ -1,0 +1,20 @@
+{
+  "name": "spider-man-neon-pursuit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A stylish 3D web-swinging chase game starring Spider-Man against the Green Goblin.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 3002",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 3002"
+  },
+  "dependencies": {
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/rajdhani": "^5.3.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  }
+}
